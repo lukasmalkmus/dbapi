@@ -3,6 +3,7 @@ package dbapi
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -23,12 +24,17 @@ const (
 	DefaultURL = "https://simulator-api.db.com/gw/dbapi/v1/"
 )
 
+var (
+	ErrInvalidClient = errors.New("")
+)
+
 // A Client manages communication with the Deutsche Bank API.
 type Client struct {
 	client  *http.Client
 	baseURL *url.URL
 	token   string
 
+	// API Resources
 	Addresses    *AddressesService
 	Accounts     *AccountsService
 	Transactions *TransactionsService
@@ -45,22 +51,34 @@ type Response struct {
 // the behaviour of the API Client.
 type Option func(c *Client) error
 
+// SetClient specifies a custom http client that should be used to make requests.
+func SetClient(client *http.Client) Option {
+	return func(c *Client) error { return c.setClient(client) }
+}
+func (c *Client) setClient(client *http.Client) error {
+	if client == nil {
+		return errors.New("")
+	}
+	c.client = client
+	return nil
+}
+
 // New creates and returns a new API Client. Options can be passed to configure
 // the Client.
 func New(AccessToken string, options ...Option) (*Client, error) {
 	/*
-			   &http.Client{
-			       Transport: &http.Transport{
-		               Proxy: http.ProxyFromEnvironment,
-			           Dial: (&net.Dialer{
-			               Timeout:   3 * time.Seconds,
-			               KeepAlive: 30 * time.Seconds,
-			           }).Dial,
-		               ExpectContinueTimeout: 1 * time.Second,
-		               ResponseHeaderTimeout: 3 * time.Second,
-			           TLSHandshakeTimeout: 3 * time.Seconds,
-			       },
-			   },
+		client := &http.Client{
+			Transport: &http.Transport{
+				Proxy: http.ProxyFromEnvironment,
+				Dial: (&net.Dialer{
+					Timeout:   3 * time.Second,
+					KeepAlive: 30 * time.Second,
+				}).Dial,
+				ExpectContinueTimeout: 1 * time.Second,
+				ResponseHeaderTimeout: 3 * time.Second,
+				TLSHandshakeTimeout:   3 * time.Second,
+			},
+		}
 	*/
 
 	// Parse the DefaultURL.

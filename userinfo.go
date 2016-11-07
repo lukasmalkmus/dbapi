@@ -1,7 +1,6 @@
 package dbapi
 
-// The UserInfoService binds to the HTTP endpoints which belong to
-// transactions.
+// The UserInfoService binds to the HTTP endpoints which belong to the userInfo resource.
 type UserInfoService struct {
 	client *Client
 }

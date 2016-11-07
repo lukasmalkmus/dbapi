@@ -3,7 +3,7 @@ package dbapi
 import "fmt"
 
 // The TransactionsService binds to the HTTP endpoints which belong to
-// transactions.
+// the transactions resource.
 type TransactionsService struct {
 	client *Client
 }
