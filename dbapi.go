@@ -25,7 +25,9 @@ const (
 )
 
 var (
-	ErrInvalidClient = errors.New("")
+	// ErrInvalidClient is raised when the costum HTTP client is invalid (e.g.
+	// nil).
+	ErrInvalidClient = errors.New("Invalid http client!")
 )
 
 // A Client manages communication with the Deutsche Bank API.
@@ -57,7 +59,7 @@ func SetClient(client *http.Client) Option {
 }
 func (c *Client) setClient(client *http.Client) error {
 	if client == nil {
-		return errors.New("")
+		return ErrInvalidClient
 	}
 	c.client = client
 	return nil
@@ -66,21 +68,6 @@ func (c *Client) setClient(client *http.Client) error {
 // New creates and returns a new API Client. Options can be passed to configure
 // the Client.
 func New(AccessToken string, options ...Option) (*Client, error) {
-	/*
-		client := &http.Client{
-			Transport: &http.Transport{
-				Proxy: http.ProxyFromEnvironment,
-				Dial: (&net.Dialer{
-					Timeout:   3 * time.Second,
-					KeepAlive: 30 * time.Second,
-				}).Dial,
-				ExpectContinueTimeout: 1 * time.Second,
-				ResponseHeaderTimeout: 3 * time.Second,
-				TLSHandshakeTimeout:   3 * time.Second,
-			},
-		}
-	*/
-
 	// Parse the DefaultURL.
 	url, err := url.Parse(DefaultURL)
 	if err != nil {
