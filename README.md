@@ -32,6 +32,10 @@ The Deutsche Bank API will grow with time and so will this package.
   - [x] Basic test suit
   - [x] Easy to use package API
 
+#### ToDo
+  - [ ] Refactor package
+    - [ ] User should select API version to use (currently `v1` is hard coded)
+
 ### Usage
 #### Requirements
 Create an account on the [Developer Portal](https://developer.db.com) and follow
