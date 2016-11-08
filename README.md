@@ -1,7 +1,3 @@
-# WIP!
-
----
-
 # LukasMa/dbapi
 > Access the Deutsche Bank API from your go application. - by **[Lukas Malkmus](https://github.com/LukasMa)**
 
@@ -19,7 +15,7 @@
 2. [Features](#features)
 3. [Usage](#usage)
 4. [Contributing](#contributing)
-5. [License](#License)
+5. [License](#license)
 
 ### Introduction
 This package is a small wrapper around the recently released Deutsche Bank API
