@@ -13,15 +13,15 @@ type Transactions []struct {
 	Amount           float64 `json:"amount,omitempty"`
 	CounterPartyName string  `json:"counterPartyName,omitempty"`
 	CounterPartyIBAN string  `json:"counterPartyIban,omitempty"`
-	Date             string  `json:"date,omitempty"`
 	Usage            string  `json:"usage,omitempty"`
+	Date             string  `json:"date,omitempty"`
 }
 
 // GetAll reads all transactions of all accounts of the current user. It is
 // not apparent who issued a transaction, only whether the user gained or lost
 // money by it (based on wether the amount is positive or negative respectively).
 func (s *TransactionsService) GetAll() (*Transactions, *Response, error) {
-	u := "/transacions"
+	u := "/transactions"
 	r := new(Transactions)
 
 	resp, err := s.client.Call("GET", u, nil, r)
@@ -34,7 +34,7 @@ func (s *TransactionsService) GetAll() (*Transactions, *Response, error) {
 // whether the user gained or lost money by it (based on wether the amount is
 // positive or negative respectively).
 func (s *TransactionsService) Get(iban string) (*Transactions, *Response, error) {
-	u := fmt.Sprintf("/transacions?iban=%s", iban)
+	u := fmt.Sprintf("/transactions?iban=%s", iban)
 	r := new(Transactions)
 
 	resp, err := s.client.Call("GET", u, nil, r)

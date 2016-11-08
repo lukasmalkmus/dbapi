@@ -7,10 +7,10 @@ type UserInfoService struct {
 
 // UserInfo represents personal information of a user.
 type UserInfo struct {
-	DateOfBirth string `json:"dateOfBirth,omitempty"`
 	FirstName   string `json:"firstName,omitempty"`
-	Gender      string `json:"gender,omitempty"`
 	LastName    string `json:"lastName,omitempty"`
+	DateOfBirth string `json:"dateOfBirth,omitempty"`
+	Gender      string `json:"gender,omitempty"`
 }
 
 // Get retrieves personal information (e.g. first name, family name date of

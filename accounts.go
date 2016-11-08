@@ -10,8 +10,8 @@ type AccountsService struct {
 
 // Accounts are the cash accounts of the user.
 type Accounts []struct {
-	Balance            float64 `json:"balance,omitempty"`
 	Iban               string  `json:"iban,omitempty"`
+	Balance            float64 `json:"balance,omitempty"`
 	ProductDescription string  `json:"productDescription,omitempty"`
 }
 

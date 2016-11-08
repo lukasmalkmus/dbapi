@@ -28,6 +28,8 @@ var (
 	// ErrInvalidClient is raised when the costum HTTP client is invalid (e.g.
 	// nil).
 	ErrInvalidClient = errors.New("Invalid http client!")
+	// ErrInvalidURL is raised when the url couldn't be parsed by url.Parse().
+	ErrInvalidURL = errors.New("Invalid url!")
 )
 
 // A Client manages communication with the Deutsche Bank API.
@@ -54,6 +56,7 @@ type Response struct {
 type Option func(c *Client) error
 
 // SetClient specifies a custom http client that should be used to make requests.
+// An error ErrInvalidClient is returned if the passed client is nil.
 func SetClient(client *http.Client) Option {
 	return func(c *Client) error { return c.setClient(client) }
 }
@@ -62,6 +65,23 @@ func (c *Client) setClient(client *http.Client) error {
 		return ErrInvalidClient
 	}
 	c.client = client
+	return nil
+}
+
+// SetURL specifies the base url to use. An error ErrInvalidURL is returned if
+// the passed url string can't be parsed properly.
+func SetURL(urlStr string) Option {
+	return func(c *Client) error { return c.setURL(urlStr) }
+}
+func (c *Client) setURL(urlStr string) error {
+	if len(urlStr) == 0 {
+		return ErrInvalidURL
+	}
+	url, err := url.Parse(urlStr)
+	if err != nil {
+		return ErrInvalidURL
+	}
+	c.baseURL = url
 	return nil
 }
 
