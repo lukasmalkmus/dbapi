@@ -135,7 +135,7 @@ func TestNewRequest_InvalidJSON(t *testing.T) {
 		type T struct {
 			A map[int]interface{}
 		}
-		_, err = c.NewRequest("GET", "/", &T{})
+		_, err = c.NewRequest(GET, "/", &T{})
 
 		assert(t, err != nil, "Expected error to be returned.")
 
@@ -153,7 +153,7 @@ func TestNewRequest_BadURL(t *testing.T) {
 	)
 	ok(t, err)
 
-	_, err = c.NewRequest("GET", ":", nil)
+	_, err = c.NewRequest(GET, ":", nil)
 	assert(t, err != nil, "Expected error to be returned.")
 
 	if err, ok := err.(*url.Error); !ok || err.Op != "parse" {
@@ -175,7 +175,7 @@ func TestNewRequest_EmptyBody(t *testing.T) {
 	)
 	ok(t, err)
 
-	req, err := c.NewRequest("GET", "/", nil)
+	req, err := c.NewRequest(GET, "/", nil)
 	ok(t, err)
 
 	assert(t, req.Body == nil, "Constructed request contains a non-nil Body.")
@@ -207,11 +207,11 @@ func TestDo_ioWriter(t *testing.T) {
 	content := `{"A":"a"}`
 
 	testMux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		testMethod(t, r, "GET")
+		testMethod(t, r, GET)
 		fmt.Fprint(w, content)
 	})
 
-	req, _ := testClient.NewRequest("GET", "/", nil)
+	req, _ := testClient.NewRequest(GET, "/", nil)
 	var buf []byte
 	actual := bytes.NewBuffer(buf)
 	testClient.Do(req, actual)
@@ -227,7 +227,7 @@ func TestDo_HTTPError(t *testing.T) {
 		http.Error(w, "Bad Request", 400)
 	})
 
-	req, _ := testClient.NewRequest("GET", "/", nil)
+	req, _ := testClient.NewRequest(GET, "/", nil)
 	_, err := testClient.Do(req, nil)
 
 	assert(t, err != nil, "Expected error to be returned (expected HTTP 400 error).")
@@ -243,7 +243,7 @@ func TestDo_RedirectLoop(t *testing.T) {
 		http.Redirect(w, r, "/", http.StatusFound)
 	})
 
-	req, _ := testClient.NewRequest("GET", "/", nil)
+	req, _ := testClient.NewRequest(GET, "/", nil)
 	_, err := testClient.Do(req, nil)
 
 	assert(t, err != nil, "Expected error to be returned.")
