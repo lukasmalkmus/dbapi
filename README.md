@@ -28,6 +28,13 @@ and covers all of the available http endpoints.
 The Deutsche Bank API will grow with time and so will this package.
 
 ### Features
+  - [x] Cover all available endpoints
+    - [x] Addresses (`/addresses`)
+    - [x] Accounts (`/cashAccounts`)
+    - [x] Transactions (`/transactions`)
+    - [x] UserInfo (`/userInfo`)
+  - [x] Basic test suit
+  - [x] Easy to use package API
 
 ### Usage
 #### Requirements
