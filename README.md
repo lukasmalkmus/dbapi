@@ -105,7 +105,7 @@ api, err := dbapi.New(
 ##### Accessing resources
 Accessing the endpoints is easy. Since the API is in an early state there aren't
 many enpoints, yet. A list of available endpoints can be found on the
-Developer Portal > API Explorer.
+Developer Portal > API Explorer. Or take a look at the [swagger specification](https://simulator-api.db.com/gw/dbapi/v1/swagger.json).
 
 ```go
 accounts, response, err := api.Accounts.GetAll()
@@ -117,10 +117,16 @@ fmt.Printf("%v", accounts)
 ```
 
 There are currently four endpoints with either one or two methodes to explore:
-  - `api.Addresses.Get()`
-  - `api.Accounts.{Get(iban string), GetAll()}`
-  - `api.Transactions.{Get(iban string), GetAll()}`
-  - `api.UserInfo.Get()`
+  - `api.Addresses`
+    - `.Get()`
+  - `api.Accounts`
+    - `.Get(iban string)`
+    - `.GetAll()`
+  - `api.Transactions`
+    - `.Get(iban string)`
+    - `.GetAll()`
+  - `api.UserInfo`
+    - `.Get()`
 
 ### Contributing
 Feel free to submit PRs or to fill Issues. Every help is appreciated.
