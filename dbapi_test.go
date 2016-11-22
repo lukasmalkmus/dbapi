@@ -105,6 +105,30 @@ func TestNew_SetURL(t *testing.T) {
 	}
 }
 
+func TestNew_SetVersion(t *testing.T) {
+	mockData := []struct {
+		version            Version
+		ExpectedVersion    Version
+		ExpectedVersionStr string
+		ExpectedError      error
+	}{
+		{DefaultVersion, V1, "v1", nil},
+		{V1, V1, "v1", nil},
+	}
+
+	for _, mock := range mockData {
+		c, err := New(
+			testAccessToken,
+			SetVersion(mock.version),
+		)
+		if c != nil {
+			equals(t, mock.ExpectedVersion, c.version)
+			equals(t, mock.ExpectedVersionStr, c.version.String())
+		}
+		equals(t, err, mock.ExpectedError)
+	}
+}
+
 func TestNewRequest(t *testing.T) {
 	c, err := New(
 		testAccessToken,

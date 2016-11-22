@@ -18,10 +18,17 @@ const (
 )
 
 const (
+	// V1 is the version 1 of the dbAPI.
+	V1 = "v1"
+)
+
+const (
 	// DefaultURL is the URL of the Deutsche Bank API which is used by default.
 	// NOTE: In a later release the version will be removed from the default URL
 	// and needs to be passed explicitly.
-	DefaultURL = "https://simulator-api.db.com/gw/dbapi/v1/"
+	DefaultURL = "https://simulator-api.db.com/gw/dbapi/"
+	// DefaultVersion is the default API version to use and defaults to v1.
+	DefaultVersion = V1
 )
 
 var (
@@ -36,6 +43,7 @@ var (
 type Client struct {
 	client  *http.Client
 	baseURL *url.URL
+	version Version
 	token   string
 
 	// API Resources
@@ -49,6 +57,13 @@ type Client struct {
 // wrapper around the standard http.Response type.
 type Response struct {
 	*http.Response
+}
+
+// Version is the API version.
+type Version string
+
+func (v Version) String() string {
+	return string(v)
 }
 
 // An Option serves as a 'functional parameter' which can be used to configure
@@ -82,6 +97,15 @@ func (c *Client) setURL(urlStr string) error {
 		return ErrInvalidURL
 	}
 	c.baseURL = url
+	return nil
+}
+
+// SetVersion specifies the api version to use.
+func SetVersion(version Version) Option {
+	return func(c *Client) error { return c.setVersion(version) }
+}
+func (c *Client) setVersion(version Version) error {
+	c.version = version
 	return nil
 }
 
@@ -222,7 +246,7 @@ func (c *Client) NewRequest(m, urlStr string, body interface{}) (*http.Request, 
 // buildURLForRequest will build the URL (as string) that will be called. It
 // does several cleaning tasks for us.
 func (c *Client) buildURLForRequest(urlStr string) (string, error) {
-	u := c.baseURL.String()
+	u := c.baseURL.String() + c.version.String()
 
 	// If there is no / at the end, add one.
 	if strings.HasSuffix(u, "/") == false {
