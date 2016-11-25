@@ -13,7 +13,9 @@ If you have a valid access token you can start to use this package.
 
     // Create a new client.
     AccessToken := "1234567890abcdefghijklmnopqrstuvwxyz"
-    api, err := dbapi.New(AccessToken)
+    api, err := dbapi.New(
+        SetToken(AccessToken),
+    )
     if err != nil {
         fmt.Fatalln(err)
     }
