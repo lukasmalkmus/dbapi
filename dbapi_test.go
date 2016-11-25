@@ -41,13 +41,16 @@ var (
 )
 
 func TestNew(t *testing.T) {
-	api, err := New(testAccessToken)
+	api, err := New(
+		SetToken(testAccessToken),
+	)
 	ok(t, err)
 
 	// Is configuration present?
 	equals(t, DefaultURL, api.baseURL.String())
+	equals(t, DefaultVersion, api.version.String())
 	equals(t, http.DefaultClient, api.client)
-	equals(t, testAccessToken, api.token)
+	equals(t, testAccessToken, api.Authentication.Token())
 
 	// Are endpoints/resources present?
 	equals(t, &AddressesService{client: api}, api.Addresses)
@@ -56,7 +59,7 @@ func TestNew(t *testing.T) {
 	equals(t, &UserInfoService{client: api}, api.UserInfo)
 }
 
-func TestNew_SetClient(t *testing.T) {
+func TestSetClient(t *testing.T) {
 	customHTTPClient := &http.Client{
 		Timeout: 30 * time.Second,
 	}
@@ -72,7 +75,7 @@ func TestNew_SetClient(t *testing.T) {
 
 	for _, mock := range mockData {
 		c, err := New(
-			testAccessToken,
+			SetToken(testAccessToken),
 			SetClient(mock.HTTPClient),
 		)
 		if c != nil {
@@ -82,20 +85,44 @@ func TestNew_SetClient(t *testing.T) {
 	}
 }
 
-func TestNew_SetURL(t *testing.T) {
+func TestSetToken(t *testing.T) {
+	mockData := []struct {
+		token         string
+		ExpectedToken string
+		ExpectedError error
+	}{
+		{"", "", nil},
+		{"123", "123", nil},
+		{testAccessToken, testAccessToken, nil},
+	}
+
+	for _, mock := range mockData {
+		c, err := New(
+			SetToken(testAccessToken),
+			SetToken(mock.token),
+		)
+		if c != nil {
+			equals(t, mock.ExpectedToken, c.Authentication.token)
+		}
+		equals(t, err, mock.ExpectedError)
+	}
+}
+
+func TestSetURL(t *testing.T) {
 	mockData := []struct {
 		urlStr         string
 		ExpectedURLStr string
 		ExpectedError  error
 	}{
 		{testAPI, testAPI, nil},
+		{"https://api.db.com", "https://api.db.com/", nil},
 		{"", DefaultURL, ErrInvalidURL},
 		{"://not-existing", DefaultURL, ErrInvalidURL},
 	}
 
 	for _, mock := range mockData {
 		c, err := New(
-			testAccessToken,
+			SetToken(testAccessToken),
 			SetURL(mock.urlStr),
 		)
 		if c != nil {
@@ -105,7 +132,7 @@ func TestNew_SetURL(t *testing.T) {
 	}
 }
 
-func TestNew_SetVersion(t *testing.T) {
+func TestSetVersion(t *testing.T) {
 	mockData := []struct {
 		version            Version
 		ExpectedVersion    Version
@@ -118,7 +145,7 @@ func TestNew_SetVersion(t *testing.T) {
 
 	for _, mock := range mockData {
 		c, err := New(
-			testAccessToken,
+			SetToken(testAccessToken),
 			SetVersion(mock.version),
 		)
 		if c != nil {
@@ -131,12 +158,12 @@ func TestNew_SetVersion(t *testing.T) {
 
 func TestNewRequest(t *testing.T) {
 	c, err := New(
-		testAccessToken,
+		SetToken(testAccessToken),
 		SetURL(testAPI),
 	)
 	ok(t, err)
 
-	inURL, outURL := "/foo", testAPI+"foo"
+	inURL, outURL := "/foo", testAPI+"v1/foo"
 	inBody, outBody := &testRequest{ID: 1, Name: "Test Request", Status: 1}, `{"id":1,"name":"Test Request","status":1}`+"\n"
 	req, _ := c.NewRequest("POST", inURL, inBody)
 
@@ -172,7 +199,7 @@ func TestNewRequest_InvalidJSON(t *testing.T) {
 func TestNewRequest_BadURL(t *testing.T) {
 
 	c, err := New(
-		testAccessToken,
+		SetToken(testAccessToken),
 		SetURL(testAPI),
 	)
 	ok(t, err)
@@ -194,7 +221,7 @@ func TestNewRequest_BadURL(t *testing.T) {
 // errors.
 func TestNewRequest_EmptyBody(t *testing.T) {
 	c, err := New(
-		testAccessToken,
+		SetToken(testAccessToken),
 		SetURL(testAPI),
 	)
 	ok(t, err)
@@ -287,7 +314,7 @@ func setup() {
 
 	// dbapi client configured to use test server.
 	testClient, _ = New(
-		testAccessToken,
+		SetToken(testAccessToken),
 		SetURL(testServer.URL),
 	)
 }

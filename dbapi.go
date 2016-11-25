@@ -24,8 +24,6 @@ const (
 
 const (
 	// DefaultURL is the URL of the Deutsche Bank API which is used by default.
-	// NOTE: In a later release the version will be removed from the default URL
-	// and needs to be passed explicitly.
 	DefaultURL = "https://simulator-api.db.com/gw/dbapi/"
 	// DefaultVersion is the default API version to use and defaults to v1.
 	DefaultVersion = V1
@@ -44,7 +42,9 @@ type Client struct {
 	client  *http.Client
 	baseURL *url.URL
 	version Version
-	token   string
+
+	// Authentication
+	Authentication *AuthenticationService
 
 	// API Resources
 	Addresses    *AddressesService
@@ -83,6 +83,15 @@ func (c *Client) setClient(client *http.Client) error {
 	return nil
 }
 
+// SetToken specifies the api token.
+func SetToken(token string) Option {
+	return func(c *Client) error { return c.setToken(token) }
+}
+func (c *Client) setToken(token string) error {
+	c.Authentication.token = token
+	return nil
+}
+
 // SetURL specifies the base url to use. An error ErrInvalidURL is returned if
 // the passed url string can't be parsed properly.
 func SetURL(urlStr string) Option {
@@ -91,6 +100,10 @@ func SetURL(urlStr string) Option {
 func (c *Client) setURL(urlStr string) error {
 	if len(urlStr) == 0 {
 		return ErrInvalidURL
+	}
+	// If there is no / at the end, add one.
+	if strings.HasSuffix(urlStr, "/") == false {
+		urlStr += "/"
 	}
 	url, err := url.Parse(urlStr)
 	if err != nil {
@@ -111,7 +124,7 @@ func (c *Client) setVersion(version Version) error {
 
 // New creates and returns a new API Client. Options can be passed to configure
 // the Client.
-func New(AccessToken string, options ...Option) (*Client, error) {
+func New(options ...Option) (*Client, error) {
 	// Parse the DefaultURL.
 	url, err := url.Parse(DefaultURL)
 	if err != nil {
@@ -122,21 +135,30 @@ func New(AccessToken string, options ...Option) (*Client, error) {
 	c := &Client{
 		client:  http.DefaultClient,
 		baseURL: url,
-		token:   AccessToken,
+		version: DefaultVersion,
 	}
+	c.Authentication = &AuthenticationService{}
 	c.Addresses = &AddressesService{client: c}
 	c.Accounts = &AccountsService{client: c}
 	c.Transactions = &TransactionsService{client: c}
 	c.UserInfo = &UserInfoService{client: c}
 
 	// Apply supplied options.
-	for _, option := range options {
-		if err := option(c); err != nil {
-			return nil, err
-		}
+	if err := c.Options(options...); err != nil {
+		return nil, err
 	}
 
 	return c, nil
+}
+
+// Options applies Options to a client instance.
+func (c *Client) Options(options ...Option) error {
+	for _, option := range options {
+		if err := option(c); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 // Call combines Client.NewRequest() and Client.Do() methodes to avoid code
@@ -234,9 +256,11 @@ func (c *Client) NewRequest(m, urlStr string, body interface{}) (*http.Request, 
 		return nil, err
 	}
 
-	// Apply Authentication (OAuth2 Access Token).
+	// Apply Authentication if credentials are present.
 	// Documentation: https://developer.db.com/#/apidocumentation/apiauthorizationguide
-	req.Header.Add("Authorization", "Bearer "+c.token)
+	if c.Authentication.HasAuth() {
+		req.Header.Add("Authorization", "Bearer "+c.Authentication.Token())
+	}
 
 	req.Header.Add("Accept", "application/json")
 

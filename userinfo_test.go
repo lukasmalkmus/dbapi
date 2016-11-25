@@ -10,7 +10,7 @@ func TestUserInfoService_Get(t *testing.T) {
 	setup()
 	defer teardown()
 
-	testMux.HandleFunc("/userInfo", func(w http.ResponseWriter, r *http.Request) {
+	testMux.HandleFunc("/v1/userInfo", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, GET)
 		fmt.Fprint(w, `{"dateOfBirth":"1977-03-02","firstName":"Claudia","gender":"FEMALE","lastName":"Klar"}`)
 	})
