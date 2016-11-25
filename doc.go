@@ -14,7 +14,7 @@ If you have a valid access token you can start to use this package.
     // Create a new client.
     AccessToken := "1234567890abcdefghijklmnopqrstuvwxyz"
     api, err := dbapi.New(
-        SetToken(AccessToken),
+        dbapi.SetToken(AccessToken),
     )
     if err != nil {
         fmt.Fatalln(err)
@@ -46,7 +46,7 @@ It is also possible to use a custom http client instead of http.DefaultClient:
 
     // Use your custom http client.
     api, err := dbapi.New(
-        AccessToken,
+        dbapi.SetToken(AccessToken),
         dbapi.SetClient(client),
    )
    // ...
