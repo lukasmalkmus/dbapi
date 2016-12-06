@@ -35,7 +35,7 @@ func main() {
 	app.Compiled = CompileTime
 	app.Version = Version
 	app.Authors = []cli.Author{
-		cli.Author{
+		{
 			Name:  "Lukas Malkmus",
 			Email: "mail@lukasmalkmus.com",
 		},
@@ -159,28 +159,4 @@ func main() {
 	}
 
 	app.Run(os.Args)
-
-	/*
-		    app.Action = func(c *cli.Context) error {
-				// Create a new client.
-				AccessToken := "1234567890abcdefghijklmnopqrstuvwxyz"
-				api, err := dbapi.New(
-					dbapi.SetToken(AccessToken),
-				)
-				if err != nil {
-					log.Fatalln(err)
-					return err
-				}
-
-				// Start to access the Deutsche Bank API (retrieve and print user accounts).
-				accounts, response, err := api.Accounts.GetAll()
-				if err != nil {
-					fmt.Println(response.Response)
-					log.Fatalln(err)
-					return err
-				}
-				fmt.Printf("%v", accounts)
-				return nil
-			}
-	*/
 }
