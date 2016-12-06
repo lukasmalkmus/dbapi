@@ -23,7 +23,7 @@ If you have a valid access token you can start to use this package.
     // Start to access the Deutsche Bank API (retrieve and print user accounts).
     accounts, response, err := api.Accounts.GetAll()
     if err != nil {
-        fmt.Println(response)
+        fmt.Println(response.Response)
         log.Fatalln(err)
     }
     fmt.Printf("%v", accounts)
