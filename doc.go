@@ -17,14 +17,14 @@ If you have a valid access token you can start to use this package.
         dbapi.SetToken(AccessToken),
     )
     if err != nil {
-        fmt.Fatalln(err)
+        log.Fatalln(err)
     }
 
     // Start to access the Deutsche Bank API (retrieve and print user accounts).
     accounts, response, err := api.Accounts.GetAll()
     if err != nil {
         fmt.Println(response)
-        fmt.Fatalln(err)
+        log.Fatalln(err)
     }
     fmt.Printf("%v", accounts)
 
