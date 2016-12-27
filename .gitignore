@@ -30,3 +30,6 @@ _testmain.go
 
 # external packages folder
 vendor/
+
+# folder of cmd
+cmd/
