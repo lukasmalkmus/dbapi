@@ -14,7 +14,7 @@ import (
 
 const (
 	// Version is the version of this package.
-	version   = "0.4.2"
+	version   = "0.5"
 	userAgent = "dbapi/" + version
 )
 
