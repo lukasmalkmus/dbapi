@@ -34,7 +34,7 @@ The Deutsche Bank API will grow over time and so will this package.
   - [x] Easy to use package API
 
 #### Todo
-  - [x] Provide authentication?
+  - [ ] Provide authentication?
 
 ### Usage
 #### Requirements
@@ -140,12 +140,12 @@ There are currently four endpoints with either one or two methodes to explore:
     - `.Get()`
 
 ### Contributing
-Feel free to submit PRs or to fill Issues. Every help is appreciated.
+Feel free to submit PRs or to fill Issues. Every kind of help is appreciated.
 
 ### License
 (c) Lukas Malkmus, 2016
 
-Distributed under MIT License (`�The MIT License`�).
+Distributed under MIT License (`The MIT License`).
 
 See [LICENSE](LICENSE) for more information.
 
