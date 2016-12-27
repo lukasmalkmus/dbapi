@@ -13,6 +13,12 @@ import (
 )
 
 const (
+	// Version is the version of this package.
+	version   = "0.4.2"
+	userAgent = "dbapi/" + version
+)
+
+const (
 	// GET is a shortcut for http.MethodGet.
 	GET = http.MethodGet
 )
@@ -264,7 +270,9 @@ func (c *Client) NewRequest(m, urlStr string, body interface{}) (*http.Request, 
 		req.Header.Add("Authorization", "Bearer "+c.Authentication.Token())
 	}
 
+	// Add some important headers.
 	req.Header.Add("Accept", "application/json")
+	req.Header.Add("User-Agent", userAgent)
 
 	return req, nil
 }
