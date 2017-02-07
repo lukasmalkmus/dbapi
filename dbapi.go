@@ -201,7 +201,7 @@ func (c *Client) Do(req *http.Request, r interface{}) (*Response, error) {
 
 	err = CheckResponse(resp)
 	if err != nil {
-		// Return respone in case the caller wants to inspect it further.
+		// Return response in case the caller wants to inspect it further.
 		return response, err
 	}
 
@@ -212,7 +212,7 @@ func (c *Client) Do(req *http.Request, r interface{}) (*Response, error) {
 			var body []byte
 			body, err = ioutil.ReadAll(resp.Body)
 			if err != nil {
-				// Return respone in case the caller wants to inspect it further.
+				// Return response in case the caller wants to inspect it further.
 				return response, err
 			}
 			err = json.Unmarshal(body, r)
