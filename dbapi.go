@@ -125,7 +125,9 @@ func (c *Client) setVersion(version Version) error {
 // NewClient creates and returns a new api client. Options can be passed to
 // configure the client.
 func NewClient(options ...Option) (*Client, error) {
-	// Parse the DefaultURL.
+	// Parse the DefaultURL. Panic if that fails because this means the default
+	// URL is invalid. But this should never happen because it is covered by
+	// tests :)
 	url, err := url.Parse(DefaultURL)
 	if err != nil {
 		panic(err)
