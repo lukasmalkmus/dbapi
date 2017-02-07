@@ -1,6 +1,9 @@
 package dbapi
 
-import "fmt"
+import (
+	"fmt"
+	"net/http"
+)
 
 // The TransactionsService binds to the HTTP endpoints which belong to
 // the transactions resource.
@@ -24,7 +27,7 @@ func (s *TransactionsService) GetAll() (*Transactions, *Response, error) {
 	u := "/transactions"
 	r := new(Transactions)
 
-	resp, err := s.client.Call(GET, u, nil, r)
+	resp, err := s.client.Call(http.MethodGet, u, nil, r)
 	return r, resp, err
 }
 
@@ -37,6 +40,6 @@ func (s *TransactionsService) Get(iban string) (*Transactions, *Response, error)
 	u := fmt.Sprintf("/transactions?iban=%s", iban)
 	r := new(Transactions)
 
-	resp, err := s.client.Call(GET, u, nil, r)
+	resp, err := s.client.Call(http.MethodGet, u, nil, r)
 	return r, resp, err
 }

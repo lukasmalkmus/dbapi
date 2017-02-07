@@ -25,7 +25,7 @@ const (
 	// testAPI is a test url that won`t be called.
 	testAPI = "https://api.db.com/"
 
-	// Test token
+	// testAccessToken is a fake api token.
 	testAccessToken = "1234567890abcdefghijklmnopqrstuvwxyz"
 )
 
@@ -40,8 +40,8 @@ var (
 	testServer *httptest.Server
 )
 
-func TestNew(t *testing.T) {
-	api, err := New(
+func TestNewClient(t *testing.T) {
+	api, err := NewClient(
 		SetToken(testAccessToken),
 	)
 	ok(t, err)
@@ -74,12 +74,12 @@ func TestSetClient(t *testing.T) {
 	}
 
 	for _, mock := range mockData {
-		c, err := New(
+		api, err := NewClient(
 			SetToken(testAccessToken),
 			SetClient(mock.HTTPClient),
 		)
-		if c != nil {
-			equals(t, c.client, mock.ExpectedHTTPClient)
+		if api != nil {
+			equals(t, api.client, mock.ExpectedHTTPClient)
 		}
 		equals(t, err, mock.ExpectedError)
 	}
@@ -97,12 +97,12 @@ func TestSetToken(t *testing.T) {
 	}
 
 	for _, mock := range mockData {
-		c, err := New(
+		api, err := NewClient(
 			SetToken(testAccessToken),
 			SetToken(mock.token),
 		)
-		if c != nil {
-			equals(t, mock.ExpectedToken, c.Authentication.token)
+		if api != nil {
+			equals(t, mock.ExpectedToken, api.Authentication.token)
 		}
 		equals(t, err, mock.ExpectedError)
 	}
@@ -121,12 +121,12 @@ func TestSetURL(t *testing.T) {
 	}
 
 	for _, mock := range mockData {
-		c, err := New(
+		api, err := NewClient(
 			SetToken(testAccessToken),
 			SetURL(mock.urlStr),
 		)
-		if c != nil {
-			equals(t, mock.ExpectedURLStr, c.baseURL.String())
+		if api != nil {
+			equals(t, mock.ExpectedURLStr, api.baseURL.String())
 		}
 		equals(t, err, mock.ExpectedError)
 	}
@@ -144,20 +144,20 @@ func TestSetVersion(t *testing.T) {
 	}
 
 	for _, mock := range mockData {
-		c, err := New(
+		api, err := NewClient(
 			SetToken(testAccessToken),
 			SetVersion(mock.version),
 		)
-		if c != nil {
-			equals(t, mock.ExpectedVersion, c.version)
-			equals(t, mock.ExpectedVersionStr, c.version.String())
+		if api != nil {
+			equals(t, mock.ExpectedVersion, api.version)
+			equals(t, mock.ExpectedVersionStr, api.version.String())
 		}
 		equals(t, err, mock.ExpectedError)
 	}
 }
 
 func TestNewRequest(t *testing.T) {
-	c, err := New(
+	api, err := NewClient(
 		SetToken(testAccessToken),
 		SetURL(testAPI),
 	)
@@ -165,7 +165,7 @@ func TestNewRequest(t *testing.T) {
 
 	inURL, outURL := "/foo", testAPI+"v1/foo"
 	inBody, outBody := &testRequest{ID: 1, Name: "Test Request", Status: 1}, `{"id":1,"name":"Test Request","status":1}`+"\n"
-	req, _ := c.NewRequest("POST", inURL, inBody)
+	req, _ := api.NewRequest(http.MethodPost, inURL, inBody)
 
 	// Test that relative URL was expanded.
 	equals(t, outURL, req.URL.String())
@@ -175,36 +175,14 @@ func TestNewRequest(t *testing.T) {
 	equals(t, outBody, string(body))
 }
 
-/*
-func TestNewRequest_InvalidJSON(t *testing.T) {
-		c, err := New(
-			testAccessToken,
-			SetURL(testAPI),
-		)
-		ok(t, err)
-
-		type T struct {
-			A map[int]interface{}
-		}
-		_, err = c.NewRequest(GET, "/", &T{})
-
-		assert(t, err != nil, "Expected error to be returned.")
-
-		if err, ok := err.(*json.UnsupportedTypeError); !ok {
-			t.Errorf("Expected a JSON error; got %+v.", err)
-		}
-}
-*/
-
 func TestNewRequest_BadURL(t *testing.T) {
-
-	c, err := New(
+	api, err := NewClient(
 		SetToken(testAccessToken),
 		SetURL(testAPI),
 	)
 	ok(t, err)
 
-	_, err = c.NewRequest(GET, ":", nil)
+	_, err = api.NewRequest(http.MethodGet, ":", nil)
 	assert(t, err != nil, "Expected error to be returned.")
 
 	if err, ok := err.(*url.Error); !ok || err.Op != "parse" {
@@ -213,20 +191,19 @@ func TestNewRequest_BadURL(t *testing.T) {
 
 }
 
-// If a nil body is passed to dbapi.NewRequest, make sure that nil is also
-// passed to http.NewRequest. In most cases, passing an io.Reader that returns
-// no content is fine, since there is no difference between an HTTP request body
-// that is an empty string versus one that is not set at all. However in certain
-// cases, intermediate systems may treat these differently resulting in subtile
-// errors.
+// If a nil body is passed to NewRequest, make sure that nil is also passed to
+// http.NewRequest. In most cases, passing an io.Reader that returns no content
+// is fine, since there is no difference between an HTTP request body that is an
+// empty string versus one that is not set at all. However in certain cases,
+// intermediate systems may treat these differently resulting in subtile errors.
 func TestNewRequest_EmptyBody(t *testing.T) {
-	c, err := New(
+	api, err := NewClient(
 		SetToken(testAccessToken),
 		SetURL(testAPI),
 	)
 	ok(t, err)
 
-	req, err := c.NewRequest(GET, "/", nil)
+	req, err := api.NewRequest(http.MethodGet, "/", nil)
 	ok(t, err)
 
 	assert(t, req.Body == nil, "Constructed request contains a non-nil Body.")
@@ -241,11 +218,11 @@ func TestDo(t *testing.T) {
 	}
 
 	testMux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		testMethod(t, r, GET)
+		testMethod(t, r, http.MethodGet)
 		fmt.Fprint(w, `{"A":"a"}`)
 	})
 
-	req, _ := testClient.NewRequest(GET, "/", nil)
+	req, _ := testClient.NewRequest(http.MethodGet, "/", nil)
 	body := new(foo)
 	testClient.Do(req, body)
 
@@ -258,11 +235,11 @@ func TestDo_ioWriter(t *testing.T) {
 	content := `{"A":"a"}`
 
 	testMux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		testMethod(t, r, GET)
+		testMethod(t, r, http.MethodGet)
 		fmt.Fprint(w, content)
 	})
 
-	req, _ := testClient.NewRequest(GET, "/", nil)
+	req, _ := testClient.NewRequest(http.MethodGet, "/", nil)
 	var buf []byte
 	actual := bytes.NewBuffer(buf)
 	testClient.Do(req, actual)
@@ -278,7 +255,7 @@ func TestDo_HTTPError(t *testing.T) {
 		http.Error(w, "Bad Request", 400)
 	})
 
-	req, _ := testClient.NewRequest(GET, "/", nil)
+	req, _ := testClient.NewRequest(http.MethodGet, "/", nil)
 	_, err := testClient.Do(req, nil)
 
 	assert(t, err != nil, "Expected error to be returned (expected HTTP 400 error).")
@@ -294,7 +271,7 @@ func TestDo_RedirectLoop(t *testing.T) {
 		http.Redirect(w, r, "/", http.StatusFound)
 	})
 
-	req, _ := testClient.NewRequest(GET, "/", nil)
+	req, _ := testClient.NewRequest(http.MethodGet, "/", nil)
 	_, err := testClient.Do(req, nil)
 
 	assert(t, err != nil, "Expected error to be returned.")
@@ -313,7 +290,7 @@ func setup() {
 	testServer = httptest.NewServer(testMux)
 
 	// dbapi client configured to use test server.
-	testClient, _ = New(
+	testClient, _ = NewClient(
 		SetToken(testAccessToken),
 		SetURL(testServer.URL),
 	)

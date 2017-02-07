@@ -14,7 +14,7 @@ func TestHasAuth(t *testing.T) {
 	}
 
 	for _, mock := range mockData {
-		c, err := New(
+		c, err := NewClient(
 			SetToken(mock.token),
 		)
 		if c != nil {
@@ -36,7 +36,7 @@ func TestToken(t *testing.T) {
 	}
 
 	for _, mock := range mockData {
-		c, err := New(
+		c, err := NewClient(
 			SetToken(mock.token),
 		)
 		if c != nil {

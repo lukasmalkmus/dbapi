@@ -18,20 +18,21 @@
 5. [License](#license)
 
 ### Introduction
-This package is a small wrapper around the recently released Deutsche Bank API
-and covers all of the available http endpoints.
+The Deutsche Bank API provides developers with plausible costumer and bank data
+to let them build great, highly connected apps.
 
-The Deutsche Bank API will grow over time and so will this package.
+This package is a small wrapper around the Deutsche Bank API. It aims to be
+always up-to-date and cover all available http endpoints.
 
 ### Features
-  - [x] Cover all available endpoints
+  - [x] Covering all endpoints
     - [x] Accounts (`/cashAccounts`)
     - [x] Addresses (`/addresses`)
     - [x] Transactions (`/transactions`)
     - [x] UserInfo (`/userInfo`)
-  - [x] Select API version to use (currently only v1 is available)
+  - [x] Selectable API version
+  - [x] Easy to use
   - [x] Basic test suit
-  - [x] Easy to use package API
 
 #### Todo
   - [ ] Provide authentication?
@@ -65,7 +66,7 @@ import github.com/LukasMa/dbapi
 
 const AccessToken = "..."
 
-api, err := dbapi.New(
+api, err := dbapi.NewClient(
     dbapi.SetToken(AccessToken),
 )
 if err != nil {
@@ -97,7 +98,7 @@ client := &http.Client{
 }
 
 // Use your custom http client.
-api, err := dbapi.New(
+api, err := dbapi.NewClient(
     dbapi.SetToken(AccessToken),
     dbapi.SetClient(client),
 )
@@ -106,7 +107,7 @@ api, err := dbapi.New(
 
 **Options can also be applied to a client instance if it has already been created:**
 ```go
-api, err := dbapi.New()
+api, err := dbapi.NewClient()
 
 api.Options(
     dbapi.SetToken(AccessToken),
@@ -127,23 +128,11 @@ if err != nil {
 fmt.Printf("%v", accounts)
 ```
 
-There are currently four endpoints with either one or two methodes to explore:
-  - `api.Addresses`
-    - `.Get()`
-  - `api.Accounts`
-    - `.Get(iban string)`
-    - `.GetAll()`
-  - `api.Transactions`
-    - `.Get(iban string)`
-    - `.GetAll()`
-  - `api.UserInfo`
-    - `.Get()`
-
 ### Contributing
 Feel free to submit PRs or to fill Issues. Every kind of help is appreciated.
 
 ### License
-(c) Lukas Malkmus, 2017
+© Lukas Malkmus, 2017
 
 Distributed under MIT License (`The MIT License`).
 

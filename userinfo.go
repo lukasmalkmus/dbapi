@@ -1,5 +1,7 @@
 package dbapi
 
+import "net/http"
+
 // The UserInfoService binds to the HTTP endpoints which belong to the userInfo resource.
 type UserInfoService struct {
 	client *Client
@@ -19,6 +21,6 @@ func (s *UserInfoService) Get() (*UserInfo, *Response, error) {
 	u := "/userInfo"
 	r := new(UserInfo)
 
-	resp, err := s.client.Call(GET, u, nil, r)
+	resp, err := s.client.Call(http.MethodGet, u, nil, r)
 	return r, resp, err
 }

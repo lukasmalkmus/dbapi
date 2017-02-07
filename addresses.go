@@ -1,5 +1,7 @@
 package dbapi
 
+import "net/http"
+
 // The AddressesService binds to the HTTP endpoints which belong to the
 // addresses resource.
 type AddressesService struct {
@@ -23,6 +25,6 @@ func (s *AddressesService) Get() (*Addresses, *Response, error) {
 	u := "/addresses"
 	r := new(Addresses)
 
-	resp, err := s.client.Call(GET, u, nil, r)
+	resp, err := s.client.Call(http.MethodGet, u, nil, r)
 	return r, resp, err
 }

@@ -13,18 +13,10 @@ import (
 )
 
 const (
-	// Version is the version of this package.
-	version   = "0.5"
-	userAgent = "dbapi/" + version
-)
+	// version specifies the version of this package.
+	version = "0.5"
 
-const (
-	// GET is a shortcut for http.MethodGet.
-	GET = http.MethodGet
-)
-
-const (
-	// V1 is the version 1 of the dbAPI.
+	// V1 corresponds to version v1 of the Deutsche Bank API.
 	V1 = "v1"
 )
 
@@ -32,17 +24,17 @@ const (
 	// DefaultURL is the URL of the Deutsche Bank API which is used by default.
 	DefaultURL = "https://simulator-api.db.com/gw/dbapi/"
 
-	// DefaultVersion is the default API version to use and defaults to v1.
+	// DefaultVersion is the default API version to use.
 	DefaultVersion = V1
 )
 
 var (
 	// ErrInvalidClient is raised when the costum HTTP client is invalid (e.g.
 	// nil).
-	ErrInvalidClient = errors.New("Invalid http client!")
+	ErrInvalidClient = errors.New("Invalid http client")
 
 	// ErrInvalidURL is raised when the url couldn't be parsed by url.Parse().
-	ErrInvalidURL = errors.New("Invalid url!")
+	ErrInvalidURL = errors.New("Invalid url")
 )
 
 // A Client manages communication with the Deutsche Bank API.
@@ -130,13 +122,13 @@ func (c *Client) setVersion(version Version) error {
 	return nil
 }
 
-// New creates and returns a new API Client. Options can be passed to configure
-// the Client.
-func New(options ...Option) (*Client, error) {
+// NewClient creates and returns a new api client. Options can be passed to
+// configure the client.
+func NewClient(options ...Option) (*Client, error) {
 	// Parse the DefaultURL.
 	url, err := url.Parse(DefaultURL)
 	if err != nil {
-		return nil, err
+		panic(err)
 	}
 
 	// Create client with default settings.
@@ -157,16 +149,6 @@ func New(options ...Option) (*Client, error) {
 	}
 
 	return c, nil
-}
-
-// Options applies Options to a client instance.
-func (c *Client) Options(options ...Option) error {
-	for _, option := range options {
-		if err := option(c); err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // Call combines Client.NewRequest() and Client.Do() methodes to avoid code
@@ -272,9 +254,19 @@ func (c *Client) NewRequest(m, urlStr string, body interface{}) (*http.Request, 
 
 	// Add some important headers.
 	req.Header.Add("Accept", "application/json")
-	req.Header.Add("User-Agent", userAgent)
+	req.Header.Add("User-Agent", "dbapi/"+version)
 
 	return req, nil
+}
+
+// Options applies Options to a client instance.
+func (c *Client) Options(options ...Option) error {
+	for _, option := range options {
+		if err := option(c); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 // buildURLForRequest will build the URL (as string) that will be called. It
