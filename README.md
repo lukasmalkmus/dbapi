@@ -1,7 +1,8 @@
 # LukasMa/dbapi
 > Access the Deutsche Bank API from your go application. - by **[Lukas Malkmus](https://github.com/LukasMa)**
 
-[![Build Status][build_badge]][build]
+[![TravisCI Status][travis_badge]][travis]
+[![CircleCI Status][circle_badge]][circle]
 [![Coverage Status][coverage_badge]][coverage]
 [![Go Report][report_badge]][report]
 [![GoDoc][docs_badge]][docs]
@@ -139,15 +140,17 @@ Distributed under MIT License (`The MIT License`).
 See [LICENSE](LICENSE) for more information.
 
 
+[travis]: https://travis-ci.org/LukasMa/dbapi
+[travis_badge]: https://travis-ci.org/LukasMa/dbapi.svg
+[circle]: https://circleci.com/gh/LukasMa/dbapi
+[circle_badge]: https://circleci.com/gh/LukasMa/dbapi.svg?style=svg
+[coverage]: https://coveralls.io/github/LukasMa/dbapi?branch=master
+[coverage_badge]: https://coveralls.io/repos/github/LukasMa/dbapi/badge.svg?branch=master
+[report]: https://goreportcard.com/report/github.com/LukasMa/dbapi
+[report_badge]: https://goreportcard.com/badge/github.com/LukasMa/dbapi
 [docs]: https://godoc.org/github.com/LukasMa/dbapi
 [docs_badge]: https://godoc.org/github.com/LukasMa/dbapi?status.svg
 [release]: https://github.com/LukasMa/dbapi/releases
 [release_badge]: https://img.shields.io/github/release/LukasMa/dbapi.svg
-[report]: https://goreportcard.com/report/github.com/LukasMa/dbapi
-[report_badge]: https://goreportcard.com/badge/github.com/LukasMa/dbapi
-[build]: https://travis-ci.org/LukasMa/dbapi
-[build_badge]: https://travis-ci.org/LukasMa/dbapi.svg
-[coverage]: https://coveralls.io/github/LukasMa/dbapi?branch=master
-[coverage_badge]: https://coveralls.io/repos/github/LukasMa/dbapi/badge.svg?branch=master
 [license]: https://opensource.org/licenses/MIT
 [license_badge]: https://img.shields.io/badge/license-MIT-blue.svg
