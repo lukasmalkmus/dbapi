@@ -1,8 +1,7 @@
 # LukasMa/dbapi
 > Access the Deutsche Bank API from your go application. - by **[Lukas Malkmus](https://github.com/LukasMa)**
 
-[![TravisCI Status][travis_badge]][travis]
-[![CircleCI Status][circle_badge]][circle]
+[![Travis Status][travis_badge]][travis]
 [![Coverage Status][coverage_badge]][coverage]
 [![Go Report][report_badge]][report]
 [![GoDoc][docs_badge]][docs]
@@ -142,8 +141,6 @@ See [LICENSE](LICENSE) for more information.
 
 [travis]: https://travis-ci.org/LukasMa/dbapi
 [travis_badge]: https://travis-ci.org/LukasMa/dbapi.svg
-[circle]: https://circleci.com/gh/LukasMa/dbapi
-[circle_badge]: https://circleci.com/gh/LukasMa/dbapi.svg?style=svg
 [coverage]: https://coveralls.io/github/LukasMa/dbapi?branch=master
 [coverage_badge]: https://coveralls.io/repos/github/LukasMa/dbapi/badge.svg?branch=master
 [report]: https://goreportcard.com/report/github.com/LukasMa/dbapi
