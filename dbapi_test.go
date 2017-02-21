@@ -218,7 +218,7 @@ func TestDo(t *testing.T) {
 	}
 
 	testMux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		testMethod(t, r, http.MethodGet)
+		equals(t, http.MethodGet, r.Method)
 		fmt.Fprint(w, `{"A":"a"}`)
 	})
 
@@ -235,7 +235,7 @@ func TestDo_ioWriter(t *testing.T) {
 	content := `{"A":"a"}`
 
 	testMux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		testMethod(t, r, http.MethodGet)
+		equals(t, http.MethodGet, r.Method)
 		fmt.Fprint(w, content)
 	})
 
@@ -299,10 +299,6 @@ func setup() {
 // teardown closes the test HTTP server.
 func teardown() {
 	testServer.Close()
-}
-
-func testMethod(t *testing.T, r *http.Request, want string) {
-	equals(t, want, r.Method)
 }
 
 // assert fails the test if the condition is false.

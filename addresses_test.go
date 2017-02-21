@@ -16,7 +16,7 @@ func TestAddressesService_Get(t *testing.T) {
 	}
 
 	testMux.HandleFunc("/v1/addresses", func(w http.ResponseWriter, r *http.Request) {
-		testMethod(t, r, http.MethodGet)
+		equals(t, http.MethodGet, r.Method)
 		fmt.Fprint(w, `[{"city":"Frankfurt","houseNumber":"19","street":"Große Bockenheimer Straße","type":"MAILING_ADDRESS","zip":"60311"},{"city":"Frankfurt","houseNumber":"19","street":"Große Bockenheimer Straße","type":"REGISTRATION_ADDRESS","zip":"60311"}]`)
 	})
 

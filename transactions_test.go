@@ -20,7 +20,7 @@ func TestTransactionsService_GetAll(t *testing.T) {
 	}
 
 	testMux.HandleFunc("/v1/transactions", func(w http.ResponseWriter, r *http.Request) {
-		testMethod(t, r, http.MethodGet)
+		equals(t, http.MethodGet, r.Method)
 		fmt.Fprint(w, `[{"amount":-35.56,"counterPartyName":"Netto","usage":"POS MIT PIN. Einkauf","date":"2016-10-27"},{"amount":-52.22,"counterPartyName":"Lidl","usage":"POS MIT PIN. Einkauf","date":"2016-10-24"},{"amount":-1500,"counterPartyName":"Schwäbisch Hall","usage":"Ref. 58974-8765889","date":"2016-10-21"},{"amount":-38.98,"counterPartyName":"Toys R Us","usage":"Rechnung","date":"2016-10-17"},{"amount":-25.95,"counterPartyName":"Alnatura Frankfurt","usage":"POS MIT PIN. Einkauf","date":"2016-10-17"},{"amount":-96.16,"counterPartyName":"JET","usage":"POS MIT PIN. Die Tanke Ihrer Wahl","date":"2016-10-12"}]`)
 	})
 
@@ -39,7 +39,7 @@ func TestTransactionsService_Get(t *testing.T) {
 	}
 
 	testMux.HandleFunc("/v1/transactions", func(w http.ResponseWriter, r *http.Request) {
-		testMethod(t, r, http.MethodGet)
+		equals(t, http.MethodGet, r.Method)
 		fmt.Fprint(w, `[{"amount":50,"counterPartyName":"Claudia Klar","usage":"Sparen Samuel","date":"2016-10-01"},{"amount":50,"counterPartyName":"Claudia Klar","usage":"Sparen Samuel","date":"2016-09-01"}]`)
 	})
 
