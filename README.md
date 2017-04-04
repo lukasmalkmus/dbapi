@@ -1,5 +1,5 @@
-# LukasMa/dbapi
-> Access the Deutsche Bank API from your go application. - by **[Lukas Malkmus](https://github.com/LukasMa)**
+# lukasmalkmus/dbapi
+> Access the Deutsche Bank API from your go application. - by **[Lukas Malkmus](https://github.com/lukasmalkmus)**
 
 [![Travis Status][travis_badge]][travis]
 [![Coverage Status][coverage_badge]][coverage]
@@ -49,7 +49,7 @@ use a tagged release.
 
 Install using `go get`:
 ```bash
-go get -u github.com/LukasMa/dbapi
+go get -u github.com/lukasmalkmus/dbapi
 ```
 
 #### Usage
@@ -62,7 +62,7 @@ client you need the `Access Token`.
 ##### Creating a new api client.
 To retrieve data you need to create a new client:
 ```go
-import github.com/LukasMa/dbapi
+import github.com/lukasmalkmus/dbapi
 
 const AccessToken = "..."
 
@@ -139,15 +139,15 @@ Distributed under MIT License (`The MIT License`).
 See [LICENSE](LICENSE) for more information.
 
 
-[travis]: https://travis-ci.org/LukasMa/dbapi
-[travis_badge]: https://travis-ci.org/LukasMa/dbapi.svg
-[coverage]: https://coveralls.io/github/LukasMa/dbapi?branch=master
-[coverage_badge]: https://coveralls.io/repos/github/LukasMa/dbapi/badge.svg?branch=master
-[report]: https://goreportcard.com/report/github.com/LukasMa/dbapi
-[report_badge]: https://goreportcard.com/badge/github.com/LukasMa/dbapi
-[docs]: https://godoc.org/github.com/LukasMa/dbapi
-[docs_badge]: https://godoc.org/github.com/LukasMa/dbapi?status.svg
-[release]: https://github.com/LukasMa/dbapi/releases
-[release_badge]: https://img.shields.io/github/release/LukasMa/dbapi.svg
+[travis]: https://travis-ci.org/lukasmalkmus/dbapi
+[travis_badge]: https://travis-ci.org/lukasmalkmus/dbapi.svg
+[coverage]: https://coveralls.io/github/lukasmalkmus/dbapi?branch=master
+[coverage_badge]: https://coveralls.io/repos/github/lukasmalkmus/dbapi/badge.svg?branch=master
+[report]: https://goreportcard.com/report/github.com/lukasmalkmus/dbapi
+[report_badge]: https://goreportcard.com/badge/github.com/lukasmalkmus/dbapi
+[docs]: https://godoc.org/github.com/lukasmalkmus/dbapi
+[docs_badge]: https://godoc.org/github.com/lukasmalkmus/dbapi?status.svg
+[release]: https://github.com/lukasmalkmus/dbapi/releases
+[release_badge]: https://img.shields.io/github/release/lukasmalkmus/dbapi.svg
 [license]: https://opensource.org/licenses/MIT
 [license_badge]: https://img.shields.io/badge/license-MIT-blue.svg
