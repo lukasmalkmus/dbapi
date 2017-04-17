@@ -13,17 +13,15 @@ import (
 )
 
 const (
-	// version specifies the version of this package.
-	version = "0.5"
-
 	// V1 corresponds to version v1 of the Deutsche Bank API.
 	V1 = "v1"
+	// version specifies the version of this package.
+	version = "0.5"
 )
 
 const (
 	// DefaultURL is the URL of the Deutsche Bank API which is used by default.
 	DefaultURL = "https://simulator-api.db.com/gw/dbapi/"
-
 	// DefaultVersion is the default API version to use.
 	DefaultVersion = V1
 )
@@ -32,7 +30,6 @@ var (
 	// ErrInvalidClient is raised when the costum HTTP client is invalid (e.g.
 	// nil).
 	ErrInvalidClient = errors.New("Invalid http client")
-
 	// ErrInvalidURL is raised when the url couldn't be parsed by url.Parse().
 	ErrInvalidURL = errors.New("Invalid url")
 )

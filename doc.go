@@ -28,7 +28,8 @@ If you have a valid access token you can start to use this package.
     }
     fmt.Printf("%v", accounts)
 
-It is also possible to use a custom http client instead of http.DefaultClient:
+It is also possible to use a custom http client instead of http.DefaultClient
+(which is highly recommended!):
 
     // Create your custom http client.
     client := &http.Client{

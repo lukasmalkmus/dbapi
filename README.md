@@ -35,6 +35,7 @@ always up-to-date and cover all available http endpoints.
   - [x] Basic test suit
 
 #### Todo
+  - [ ] Implement `/processingOrders` endpoint
   - [ ] Provide authentication?
 
 ### Usage
