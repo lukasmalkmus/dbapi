@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
@@ -99,7 +98,7 @@ func (c *Client) setURL(urlStr string) error {
 		return ErrInvalidURL
 	}
 	// If there is no / at the end, add one.
-	if strings.HasSuffix(urlStr, "/") == false {
+	if !strings.HasSuffix(urlStr, "/") {
 		urlStr += "/"
 	}
 	url, err := url.Parse(urlStr)
@@ -192,7 +191,6 @@ func (c *Client) Do(req *http.Request, r interface{}) (*Response, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	defer resp.Body.Close()
 
 	// Wrap response
@@ -208,13 +206,11 @@ func (c *Client) Do(req *http.Request, r interface{}) (*Response, error) {
 		if w, ok := r.(io.Writer); ok {
 			io.Copy(w, resp.Body)
 		} else {
-			var body []byte
-			body, err = ioutil.ReadAll(resp.Body)
+			err = json.NewDecoder(resp.Body).Decode(&r)
 			if err != nil {
 				// Return response in case the caller wants to inspect it further.
 				return response, err
 			}
-			err = json.Unmarshal(body, r)
 		}
 	}
 	return response, err
@@ -274,12 +270,12 @@ func (c *Client) buildURLForRequest(urlStr string) (string, error) {
 	u := c.baseURL.String() + c.version.String()
 
 	// If there is no / at the end, add one.
-	if strings.HasSuffix(u, "/") == false {
+	if !strings.HasSuffix(u, "/") {
 		u += "/"
 	}
 
 	// If there is a "/" at the start, remove it.
-	if strings.HasPrefix(urlStr, "/") == true {
+	if strings.HasPrefix(urlStr, "/") {
 		urlStr = urlStr[1:]
 	}
 
