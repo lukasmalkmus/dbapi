@@ -36,7 +36,8 @@ always up-to-date and cover all available http endpoints.
 
 #### Todo
   - [ ] Implement `/processingOrders` endpoint
-  - [ ] Provide authentication?
+  - [ ] Replace `/userInfo` with `/partners`
+  - [ ] Provide authentication?
 
 ### Usage
 #### Requirements
